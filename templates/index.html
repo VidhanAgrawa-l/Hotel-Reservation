@@ -2,146 +2,225 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width , initial=scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static' , filename='style.css') }}">
-    <title>HOTEL RESERVATION PREDICTION ❤️</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Hotel Reservation Prediction</title>
 </head>
-
-
 <body>
-<div class="container">
-    <h2>Hotel Reservation Prediction</h2>
-
-    <form method="POST">
-        <div class="form-group">
-            <label for="lead_time">Lead Time</label>
-            <input type="number" id="lead_time" name="lead_time" required>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="logo-container">
+                <i class="fas fa-hotel"></i>
+                <h1>INN Predict</h1>
+            </div>
+            <div class="sidebar-content">
+                <div class="info-card">
+                    <h3><i class="fas fa-info-circle"></i> About This Tool</h3>
+                    <p>This tool predicts whether a hotel reservation is likely to be canceled based on various booking factors.</p>
+                </div>
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>Booking Analysis</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Prediction Accuracy</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-cog"></i>
+                        <span>Advanced Algorithms</span>
+                    </div>
+                </div>
+            </div>
         </div>
-
-
-        <div class="form-group">
-            <label for="no_of_special_request">No_of_special_request</label>
-            <input type="number" id="no_of_special_request" name="no_of_special_request" required>
+        
+        <div class="main-content">
+            <header>
+                <h2>Hotel Reservation Prediction</h2>
+                <p>Input booking details to predict cancellation probability</p>
+            </header>
+            
+            <div class="content-container">
+                <form method="POST" class="prediction-form">
+                    <div class="form-sections">
+                        <div class="form-section">
+                            <h3>Booking Details</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="lead_time">
+                                        <i class="fas fa-clock"></i> Lead Time (days)
+                                        <span class="tooltip" data-tooltip="Number of days between booking and arrival date">?</span>
+                                    </label>
+                                    <input type="number" id="lead_time" name="lead_time" min="0" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="no_of_special_request">
+                                        <i class="fas fa-concierge-bell"></i> Special Requests
+                                        <span class="tooltip" data-tooltip="Total number of special requests made by the customer">?</span>
+                                    </label>
+                                    <input type="number" id="no_of_special_request" name="no_of_special_request" min="0" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="avg_price_per_room">
+                                        <i class="fas fa-euro-sign"></i> Avg. Price Per Room (€)
+                                        <span class="tooltip" data-tooltip="Average price per day of the reservation in euros">?</span>
+                                    </label>
+                                    <input type="number" id="avg_price_per_room" name="avg_price_per_room" min="0" step="0.01" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="market_segment_type">
+                                        <i class="fas fa-chart-pie"></i> Market Segment
+                                        <span class="tooltip" data-tooltip="Type of market segment the booking belongs to">?</span>
+                                    </label>
+                                    <select id="market_segment_type" name="market_segment_type" required>
+                                        <option value="" disabled selected>Select market segment</option>
+                                        <option value="0">Aviation</option>
+                                        <option value="1">Complimentary</option>
+                                        <option value="2">Corporate</option>
+                                        <option value="3">Offline</option>
+                                        <option value="4">Online</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-section">
+                            <h3>Stay Information</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="arrival_month">
+                                        <i class="fas fa-calendar"></i> Arrival Month
+                                    </label>
+                                    <select id="arrival_month" name="arrival_month" required>
+                                        <option value="" disabled selected>Select month</option>
+                                        <option value="1">January</option>
+                                        <option value="2">February</option>
+                                        <option value="3">March</option>
+                                        <option value="4">April</option>
+                                        <option value="5">May</option>
+                                        <option value="6">June</option>
+                                        <option value="7">July</option>
+                                        <option value="8">August</option>
+                                        <option value="9">September</option>
+                                        <option value="10">October</option>
+                                        <option value="11">November</option>
+                                        <option value="12">December</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="arrival_date">
+                                        <i class="far fa-calendar-alt"></i> Arrival Date
+                                    </label>
+                                    <select id="arrival_date" name="arrival_date" required>
+                                        <option value="" disabled selected>Select date</option>
+                                        {% for i in range(1, 32) %}
+                                        <option value="{{ i }}">{{ i }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="no_of_week_nights">
+                                        <i class="fas fa-moon"></i> Weekday Nights
+                                        <span class="tooltip" data-tooltip="Number of weekday nights (Mon-Fri) in the booking">?</span>
+                                    </label>
+                                    <input type="number" id="no_of_week_nights" name="no_of_week_nights" min="0" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="no_of_weekend_nights">
+                                        <i class="fas fa-umbrella-beach"></i> Weekend Nights
+                                        <span class="tooltip" data-tooltip="Number of weekend nights (Sat-Sun) in the booking">?</span>
+                                    </label>
+                                    <input type="number" id="no_of_weekend_nights" name="no_of_weekend_nights" min="0" required>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-section">
+                            <h3>Room & Meal Preferences</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="type_of_meal_plan">
+                                        <i class="fas fa-utensils"></i> Meal Plan
+                                        <span class="tooltip" data-tooltip="Type of meal plan selected with the booking">?</span>
+                                    </label>
+                                    <select id="type_of_meal_plan" name="type_of_meal_plan" required>
+                                        <option value="" disabled selected>Select meal plan</option>
+                                        <option value="0">Meal Plan 1</option>
+                                        <option value="1">Meal Plan 2</option>
+                                        <option value="2">Meal Plan 3</option>
+                                        <option value="3">Not Selected</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="room_type_reserved">
+                                        <i class="fas fa-bed"></i> Room Type
+                                        <span class="tooltip" data-tooltip="Type of room reserved by the customer">?</span>
+                                    </label>
+                                    <select id="room_type_reserved" name="room_type_reserved" required>
+                                        <option value="" disabled selected>Select room type</option>
+                                        <option value="0">Room Type 1</option>
+                                        <option value="1">Room Type 2</option>
+                                        <option value="2">Room Type 3</option>
+                                        <option value="3">Room Type 4</option>
+                                        <option value="4">Room Type 5</option>
+                                        <option value="5">Room Type 6</option>
+                                        <option value="6">Room Type 7</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="predict-btn">
+                            <i class="fas fa-calculator"></i> Predict Reservation Status
+                        </button>
+                        <button type="reset" class="reset-btn">
+                            <i class="fas fa-redo"></i> Reset
+                        </button>
+                    </div>
+                </form>
+                
+                {% if prediction is not none %}
+                <div class="result-container {% if prediction == 0 %}result-cancel{% else %}result-confirmed{% endif %}">
+                    <div class="result-icon">
+                        {% if prediction == 0 %}
+                        <i class="fas fa-times-circle"></i>
+                        {% else %}
+                        <i class="fas fa-check-circle"></i>
+                        {% endif %}
+                    </div>
+                    <div class="result-message">
+                        <h3>
+                            {% if prediction == 0 %}
+                            Likely to Cancel
+                            {% else %}
+                            Likely to Keep Reservation
+                            {% endif %}
+                        </h3>
+                        <p>
+                            {% if prediction == 0 %}
+                            Based on the provided information, our model predicts that this reservation is likely to be canceled.
+                            {% else %}
+                            Based on the provided information, our model predicts that this customer will keep their reservation.
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            
+            <footer>
+                <p>© 2025 Hotel Reservation Prediction Tool | Powered by Machine Learning</p>
+            </footer>
         </div>
-
-        <div class="form-group">
-            <label for="avg_price_per_room">Avg_price_per_room</label>
-            <input type="number" id="avg_price_per_room" name="avg_price_per_room" required>
-        </div>
-
-        <div class="form-group">
-            <label for="arrival_month">Arrival Month</label>
-            <select id="arrival_month" name="arrival_month" required>
-                <option value="1">Januray</option>
-                <option value="2">February</option>
-                <option value="3">March</option>
-                <option value="4">April</option>
-                <option value="5">May</option>
-                <option value="6">June</option>
-                <option value="7">July</option>
-                <option value="8">August</option>
-                <option value="9">September</option>
-                <option value="10">October</option>
-                <option value="11">November</option>
-                <option value="12">December</option>
-            </select>
-        </div>
-
-
-        <div class="form-group">
-            <label for="arrival_date">Arrival Date</label>
-            <select id="arrival_date" name="arrival_date" required>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-                <option value="10">10</option>
-                <option value="11">11</option>
-                <option value="12">12</option>
-                <option value="13">13</option>
-                <option value="14">14</option>
-                <option value="15">15</option>
-                <option value="16">16</option>
-                <option value="17">17</option>
-                <option value="18">18</option>
-                <option value="19">19</option>
-                <option value="20">20</option>
-                <option value="21">21</option>
-                <option value="22">22</option>
-                <option value="23">23</option>
-                <option value="24">24</option>
-                <option value="25">25</option>
-                <option value="26">26</option>
-                <option value="27">27</option>
-                <option value="28">28</option>
-                <option value="29">29</option>
-                <option value="30">30</option>
-                <option value="31">31</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="market_segment_type">Market_segment_type</label>
-            <select id="market_segment_type" name="market_segment_type" required>
-                <option value="0">Aviation</option>
-                <option value="1">Complimentary</option>
-                <option value="2">Corporate</option>
-                <option value="3">Offline</option>
-                <option value="4">Online</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="no_of_week_nights">No_of_week_nights</label>
-            <input type="number" id="no_of_week_nights" name="no_of_week_nights" required>
-        </div>
-
-        <div class="form-group">
-            <label for="no_of_weekend_nights">No_of_weekend_nights</label>
-            <input type="number" id="no_of_weekend_nights" name="no_of_weekend_nights" required>
-        </div>
-
-        <div class="form-group">
-            <label for="type_of_meal_plan">Type_of_meal_plan</label>
-            <select id="type_of_meal_plan" name="type_of_meal_plan" required>
-                <option value="0">Meal Plan 1</option>
-                <option value="1">Meal Plan 2</option>
-                <option value="2">Meal Plan 3</option>
-                <option value="3">Not Selected</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="room_type_reserved">Type_of_meal_plan</label>
-            <select id="room_type_reserved" name="room_type_reserved" required>
-                <option value="0">Room Type 1</option>
-                <option value="1">Room Type 2</option>
-                <option value="2">Room Type 3</option>
-                <option value="3">Room Type 4</option>
-                <option value="4">Room Type 5</option>
-                <option value="5">Room Type 6</option>
-                <option value="6">Room Type 7</option>
-            </select>
-        </div>
-
-        <button type="submit">Predict</button>
-    </form>
-
-    {% if prediction is not none %}
-    <div class="result">
-        {% if prediction == 0 %}
-        <p>The Customer is going to cancel his reservation</p>
-        {% elif prediction == 1 %}
-        <p>The Customer is not going to cancel his reservation</p>
-        {% endif %}
     </div>
-    {% endif %}
-</div>
-
 </body>
 </html>
